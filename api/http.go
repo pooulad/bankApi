@@ -1,3 +1,10 @@
+package api
+
+import (
+	"encoding/json"
+	"net/http"
+)
+
 type apiFunc func(w http.ResponseWriter, r *http.Request) error
 
 type ApiError struct {
@@ -10,3 +17,11 @@ func WriteJson(w http.ResponseWriter, status int, v any) error {
 	return json.NewEncoder(w).Encode(w)
 }
 
+func MakeHttpHandleFunc(f apiFunc) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		err := f(w, r)
+		if err != nil {
+			WriteJson(w, http.StatusBadRequest, ApiError{Error: err.Error()})
+		}
+	}
+}
