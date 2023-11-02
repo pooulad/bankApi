@@ -7,6 +7,8 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/pooulad/bankApi/api"
+	"github.com/pooulad/bankApi/config"
+	"github.com/pooulad/bankApi/database"
 )
 
 func main() {
@@ -16,6 +18,14 @@ func main() {
 		log.Fatal(err)
 	}
 
+	storage, err := database.ConnectDB(config)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("%+v",storage)
+
+	err = godotenv.Load(".env")
 	if err != nil {
 		log.Fatalf("Some error occured. Err: %s", err)
 	}
