@@ -5,3 +5,7 @@ type Storage interface {
 	GetAccountById(int) (*model.Account, error)
 }
 
+type PostgresStore struct {
+	db *sql.DB
+}
+
