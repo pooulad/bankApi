@@ -22,6 +22,7 @@ func (a *ApiServer) Run() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/account", MakeHttpHandleFunc(a.handleAccount))
+	router.HandleFunc("/account/", MakeHttpHandleFunc(a.handleAccount))
 	router.HandleFunc("/account/{id}", MakeHttpHandleFunc(a.handleAccount))
 
 	log.Println("JSON api server running on port:", a.listenAddr)
