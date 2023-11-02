@@ -38,6 +38,10 @@ func ConnectDB(cfg *config.PostgresConfig) (*PostgresStore, error) {
 	}, nil
 }
 
+func (s *PostgresStore) Init() error {
+	return s.CreateAccountTable()
+}
+
 func (s *PostgresStore) CreateAccountTable() error {
 	query := `create table if not exists account (
 		id serial primary key,
