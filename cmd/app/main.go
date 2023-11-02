@@ -10,7 +10,12 @@ import (
 )
 
 func main() {
-	err := godotenv.Load(".env")
+
+	config, err := config.ReadPostgresConfig("./config.json")
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	if err != nil {
 		log.Fatalf("Some error occured. Err: %s", err)
 	}
