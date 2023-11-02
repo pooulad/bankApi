@@ -1,10 +1,17 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+	"os"
 
-func main(){
-	fmt.Println("run now")
-}	if err != nil {
+	"github.com/joho/godotenv"
+	"github.com/pooulad/bankApi/api"
+)
+
+func main() {
+	err := godotenv.Load(".env")
+	if err != nil {
 		log.Fatalf("Some error occured. Err: %s", err)
 	}
 
@@ -13,3 +20,6 @@ func main(){
 
 	serverAddress := fmt.Sprintf("%s:%s", host, port)
 
+	server := api.NewApiServer(serverAddress)
+	server.Run()
+}
