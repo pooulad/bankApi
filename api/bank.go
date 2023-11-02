@@ -28,6 +28,16 @@ func (a *ApiServer) Run() {
 }
 
 func (a *ApiServer) handleAccount(w http.ResponseWriter, r *http.Request) error {
+	if r.Method == "GET" {
+		return a.handleGetAccount(w, r)
+	}
+	if r.Method == "POST" {
+		return a.handleCreateAccount(w, r)
+	}
+	if r.Method == "DELETE" {
+		return a.handleDeleteAccount(w, r)
+	}
+
 	return nil
 }
 
