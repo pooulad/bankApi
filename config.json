@@ -1,6 +1,6 @@
 {
   "username": "postgres",
-  "password": "testpass",
+  "password": "bankApi",
   "host": "127.0.0.1",
   "name": "",
   "ssl": "disable"
