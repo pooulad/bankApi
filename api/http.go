@@ -12,8 +12,8 @@ type ApiError struct {
 }
 
 func WriteJson(w http.ResponseWriter, status int, v any) error {
+	w.Header().Add("content-type", "application/json")
 	w.WriteHeader(status)
-	w.Header().Add("Content-Type", "application/json")
 	return json.NewEncoder(w).Encode(v)
 }
 
