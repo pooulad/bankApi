@@ -1,6 +1,7 @@
 package api
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -20,6 +21,10 @@ func (a *ApiServer) Run() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/account", MakeHttpHandleFunc(a.handleAccount))
+
+	log.Println("JSON api server running on port:", a.listenAddr)
+
+	http.ListenAndServe(a.listenAddr, router)
 }
 
 func (a *ApiServer) handleAccount(w http.ResponseWriter, r *http.Request) error {
