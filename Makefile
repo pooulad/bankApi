@@ -1,5 +1,5 @@
 build:
-	@go build -o ./bin/bankApi
+	@go build -o ./bin/bankApi ./cmd/app/main.go
 
 run: build
 	@./bin/bankApi
