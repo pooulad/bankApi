@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/pooulad/bankApi/model"
 )
 
 type ApiServer struct {
@@ -42,7 +43,9 @@ func (a *ApiServer) handleAccount(w http.ResponseWriter, r *http.Request) error 
 }
 
 func (a *ApiServer) handleGetAccount(w http.ResponseWriter, r *http.Request) error {
-	return nil
+	account := model.NewAccount("mahdi", "pld")
+
+	return WriteJson(w, http.StatusOK, account)
 }
 
 func (a *ApiServer) handleCreateAccount(w http.ResponseWriter, r *http.Request) error {
