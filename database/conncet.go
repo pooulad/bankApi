@@ -37,3 +37,19 @@ func ConnectDB(cfg *config.PostgresConfig) (*PostgresStore, error) {
 		db: db,
 	}, nil
 }
+
+func (s *PostgresStore) CreateAccount(*model.Account) error {
+	return nil
+}
+
+func (s *PostgresStore) UpdateAccount(*model.Account) error {
+	return nil
+}
+
+func (s *PostgresStore) DeleteAccount(id int) error {
+	return nil
+}
+
+func (s *PostgresStore) GetAccountById(id int) error {
+	return nil
+}
