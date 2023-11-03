@@ -2,6 +2,6 @@
   "username": "postgres",
   "password": "bankApi",
   "host": "127.0.0.1",
-  "name": "",
+  "name": "postgres",
   "ssl": "disable"
 }
