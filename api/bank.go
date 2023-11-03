@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -48,14 +49,16 @@ func (a *ApiServer) handleAccount(w http.ResponseWriter, r *http.Request) error 
 }
 
 func (a *ApiServer) handleGetAccount(w http.ResponseWriter, r *http.Request) error {
-	account := model.NewAccount("mahdi", "pld")
-	// id := mux.Vars(r)["id"]
+	// account := model.NewAccount("mahdi", "pld")
+	id := mux.Vars(r)["id"]
+	fmt.Println(id)
 
-	return WriteJson(w, http.StatusOK, account)
+	return WriteJson(w, http.StatusOK, model.Account{})
 }
 
 func (a *ApiServer) handleCreateAccount(w http.ResponseWriter, r *http.Request) error {
 	CreateAccountReq := new(model.CreateAccountRequest)
+
 	err := json.NewDecoder(r.Body).Decode(CreateAccountReq)
 	if err != nil {
 		return err
@@ -67,6 +70,7 @@ func (a *ApiServer) handleCreateAccount(w http.ResponseWriter, r *http.Request) 
 	if err != nil {
 		return err
 	}
+
 	return WriteJson(w, http.StatusOK, account)
 }
 
