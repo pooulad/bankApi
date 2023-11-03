@@ -1,15 +1,18 @@
 package api
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/pooulad/bankApi/database"
 	"github.com/pooulad/bankApi/model"
 )
 
 type ApiServer struct {
 	listenAddr string
+	store      database.Storage
 }
 
 func NewApiServer(listenAddr string) *ApiServer {
@@ -52,7 +55,19 @@ func (a *ApiServer) handleGetAccount(w http.ResponseWriter, r *http.Request) err
 }
 
 func (a *ApiServer) handleCreateAccount(w http.ResponseWriter, r *http.Request) error {
-	return nil
+	CreateAccountReq := new(model.CreateAccountRequest)
+	err := json.NewDecoder(r.Body).Decode(CreateAccountReq)
+	if err != nil {
+		return err
+	}
+
+	account := model.NewAccount(CreateAccountReq.FirstName, CreateAccountReq.LastName)
+
+	err = a.store.CreateAccount(account)
+	if err != nil {
+		return err
+	}
+	return WriteJson(w, http.StatusOK, account)
 }
 
 func (a *ApiServer) handleDeleteAccount(w http.ResponseWriter, r *http.Request) error {
