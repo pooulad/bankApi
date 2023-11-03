@@ -23,7 +23,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("%+v",storage)
+	err = storage.Init()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("%+v", storage)
 
 	err = godotenv.Load(".env")
 	if err != nil {
