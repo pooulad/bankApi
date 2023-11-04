@@ -12,7 +12,7 @@ type Storage interface {
 	CreateAccount(*model.Account) error
 	DeleteAccount(int) error
 	UpdateAccount(*model.Account) error
-	GetAccountById(int) error
+	GetAccountById(int) (*model.Account, error)
 }
 
 func (s *PostgresStore) Init() error {
@@ -55,8 +55,18 @@ func (s *PostgresStore) DeleteAccount(id int) error {
 	return nil
 }
 
-func (s *PostgresStore) GetAccountById(id int) error {
-	return nil
+func (s *PostgresStore) GetAccountById(id int) (*model.Account, error) {
+	rows, err := s.db.Query("SELECT * FROM account WHERE id = $1", id)
+	if err != nil {
+		return nil, err
+	}
+
+	defer s.db.Close()
+
+	for rows.Next() {
+		return util.ScanSqlRows(rows)
+	}
+	return nil, fmt.Errorf("account %d not found", id)
 }
 
 func (s *PostgresStore) GetAccounts() ([]*model.Account, error) {
