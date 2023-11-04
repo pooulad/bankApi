@@ -83,3 +83,33 @@ func (s *PostgresStore) DeleteAccount(id int) error {
 func (s *PostgresStore) GetAccountById(id int) error {
 	return nil
 }
+
+func (s *PostgresStore) GetAccounts() ([]*model.Account, error) {
+	rows, err := s.db.Query("SELECT * FROM account")
+	if err != nil {
+		return nil, err
+	}
+
+	defer rows.Close()
+
+	accounts := []*model.Account{}
+
+	for rows.Next() {
+		account := new(model.Account)
+		err := rows.Scan(&account.ID, &account.FirstName, &account.LastName,
+			&account.Number, &account.Balance, &account.CreatedAt)
+
+		if err != nil {
+			return nil, err
+		}
+
+		accounts = append(accounts, account)
+	}
+
+	if err = rows.Err(); err != nil {
+		return accounts, err
+	}
+
+	return accounts, nil
+
+}
