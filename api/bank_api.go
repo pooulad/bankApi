@@ -48,7 +48,22 @@ func (a *ApiServer) handleLogin(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	return WriteJson(w, http.StatusOK, loginRequest)
+	acc, err := a.store.GetAccountByNumber(int(loginRequest.Number))
+	if err != nil {
+		return err
+	}
+
+	token, err := createJwt(acc)
+	if err != nil {
+		return err
+	}
+
+	loginResponse := model.LoginResponse{
+		Token:  token,
+		Number: acc.Number,
+	}
+
+	return WriteJson(w, http.StatusOK, loginResponse)
 }
 func (a *ApiServer) handleAccount(w http.ResponseWriter, r *http.Request) error {
 	if r.Method == "GET" {
