@@ -5,23 +5,45 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"time"
 
 	jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/joho/godotenv"
+	"github.com/pooulad/bankApi/database"
 	"github.com/pooulad/bankApi/model"
+	"github.com/pooulad/bankApi/util"
 )
 
-func WithJwtAuth(handlerFunc http.HandlerFunc) http.HandlerFunc {
+func withJwtAuth(handlerFunc http.HandlerFunc, s database.Storage) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		tokenString := r.Header.Get("x-jwt-token")
 
-		_, err := validateJwtToken(tokenString)
+		token, err := validateJwtToken(tokenString)
 		if err != nil {
-			WriteJson(w, http.StatusForbidden, ApiError{Error: "invalid jwt token"})
+			perimssionDeniedWriter(w)
+			return
+		}
+		if !token.Valid {
+			perimssionDeniedWriter(w)
 			return
 		}
 
+		userId, err := util.GetAccountParameterId(r)
+		if err != nil {
+			perimssionDeniedWriter(w)
+			return
+		}
+
+		account, err := s.GetAccountById(userId)
+		if err != nil {
+			perimssionDeniedWriter(w)
+			return
+		}
+
+		claims := token.Claims.(jwt.MapClaims)
+		if account.Number != int64(claims["AccountNumber"].(float64)) {
+			perimssionDeniedWriter(w)
+			return
+		}
 		handlerFunc(w, r)
 	}
 }
@@ -58,5 +80,5 @@ func createJwt(account *model.Account) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(jwt_secret_token)
+	return token.SignedString([]byte(jwt_secret_token))
 }
