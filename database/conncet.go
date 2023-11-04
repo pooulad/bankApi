@@ -10,6 +10,7 @@ import (
 )
 
 type Storage interface {
+	GetAccounts([]*model.Account) error
 	CreateAccount(*model.Account) error
 	DeleteAccount(int) error
 	UpdateAccount(*model.Account) error
