@@ -33,6 +33,7 @@ func ConnectDB(cfg *config.PostgresConfig) (*PostgresStore, error) {
 	if err != nil {
 		panic(err)
 	}
+
 	return &PostgresStore{
 		db: db,
 	}, nil
