@@ -13,12 +13,13 @@ import (
 
 type ApiServer struct {
 	listenAddr string
-	storage      database.Storage
+	store      database.Storage
 }
 
-func NewApiServer(listenAddr string) *ApiServer {
+func NewApiServer(listenAddr string, store database.Storage) *ApiServer {
 	return &ApiServer{
 		listenAddr: listenAddr,
+		store:      store,
 	}
 }
 
@@ -26,7 +27,7 @@ func (a *ApiServer) Run() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/account", MakeHttpHandleFunc(a.handleAccount))
-	router.HandleFunc("/account/{id}", MakeHttpHandleFunc(a.handleAccount))
+	router.HandleFunc("/account/{id}", MakeHttpHandleFunc(a.handleGetAccount))
 
 	log.Println("JSON api server running on port:", a.listenAddr)
 
@@ -56,16 +57,16 @@ func (a *ApiServer) handleGetAccount(w http.ResponseWriter, r *http.Request) err
 }
 
 func (a *ApiServer) handleCreateAccount(w http.ResponseWriter, r *http.Request) error {
-	CreateAccountReq := new(model.CreateAccountRequest)
+	createAccountReq := new(model.CreateAccountRequest)
 
-	err := json.NewDecoder(r.Body).Decode(CreateAccountReq)
+	err := json.NewDecoder(r.Body).Decode(createAccountReq)
 	if err != nil {
 		return err
 	}
 
-	account := model.NewAccount(CreateAccountReq.FirstName, CreateAccountReq.LastName)
+	account := model.NewAccount(createAccountReq.FirstName, createAccountReq.LastName)
 
-	err = a.storage.CreateAccount(account)
+	err = a.store.CreateAccount(account)
 	if err != nil {
 		return err
 	}
