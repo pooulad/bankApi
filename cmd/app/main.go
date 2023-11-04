@@ -40,6 +40,6 @@ func main() {
 
 	serverAddress := fmt.Sprintf("%s:%s", host, port)
 
-	server := api.NewApiServer(serverAddress)
+	server := api.NewApiServer(serverAddress,storage)
 	server.Run()
 }
