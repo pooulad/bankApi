@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/pooulad/bankApi/database"
@@ -58,11 +59,19 @@ func (a *ApiServer) handleGetAccounts(w http.ResponseWriter, r *http.Request) er
 }
 
 func (a *ApiServer) handleGetAccountById(w http.ResponseWriter, r *http.Request) error {
-	// account := model.NewAccount("mahdi", "pld")
-	id := mux.Vars(r)["id"]
-	fmt.Println(id)
+	idStr := mux.Vars(r)["id"]
 
-	return WriteJson(w, http.StatusOK, model.Account{})
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		return fmt.Errorf("invalid id given in url:%d", id)
+	}
+
+	account, err := a.store.GetAccountById(id)
+	if err != nil {
+		return err
+	}
+
+	return WriteJson(w, http.StatusOK, account)
 }
 
 func (a *ApiServer) handleCreateAccount(w http.ResponseWriter, r *http.Request) error {
