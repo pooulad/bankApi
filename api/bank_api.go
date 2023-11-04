@@ -100,6 +100,11 @@ func (a *ApiServer) handleCreateAccount(w http.ResponseWriter, r *http.Request) 
 		return err
 	}
 
+	tokenString,err := createJwt(account)
+	if err != nil {
+		return err
+	}
+
 	return WriteJson(w, http.StatusOK, account)
 }
 
