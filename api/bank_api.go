@@ -28,7 +28,7 @@ func (a *ApiServer) Run() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/account", MakeHttpHandleFunc(a.handleAccount))
-	router.HandleFunc("/account/{id}", WithJwtAuth(MakeHttpHandleFunc(a.handleAccountById)))
+	router.HandleFunc("/account/{id}", withJwtAuth(MakeHttpHandleFunc(a.handleAccountById), a.store))
 	router.HandleFunc("/transfer", MakeHttpHandleFunc(a.handleTransfer))
 
 	log.Println("JSON api server running on port:", a.listenAddr)
@@ -100,10 +100,12 @@ func (a *ApiServer) handleCreateAccount(w http.ResponseWriter, r *http.Request) 
 		return err
 	}
 
-	tokenString,err := createJwt(account)
+	tokenString, err := createJwt(account)
 	if err != nil {
 		return err
 	}
+
+	fmt.Println(tokenString)
 
 	return WriteJson(w, http.StatusOK, account)
 }
