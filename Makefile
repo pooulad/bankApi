@@ -4,8 +4,8 @@ build:
 run: build
 	@./bin/bankApi
 
-test:
-	@go test -v ./...
-
 tidy:
 	@go mod tidy
+
+testgo:
+	@go test ./... -v
