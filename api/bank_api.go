@@ -2,14 +2,13 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/gorilla/mux"
 	"github.com/pooulad/bankApi/database"
 	"github.com/pooulad/bankApi/model"
+	"github.com/pooulad/bankApi/util"
 )
 
 type ApiServer struct {
@@ -59,11 +58,9 @@ func (a *ApiServer) handleGetAccounts(w http.ResponseWriter, r *http.Request) er
 }
 
 func (a *ApiServer) handleGetAccountById(w http.ResponseWriter, r *http.Request) error {
-	idStr := mux.Vars(r)["id"]
-
-	id, err := strconv.Atoi(idStr)
+	id, err := util.GetAccountParameterId(r)
 	if err != nil {
-		return fmt.Errorf("invalid id given in url:%d", id)
+		return err
 	}
 
 	account, err := a.store.GetAccountById(id)
