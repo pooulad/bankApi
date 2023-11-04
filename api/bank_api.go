@@ -8,7 +8,6 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/pooulad/bankApi/database"
-	"github.com/pooulad/bankApi/middleware"
 	"github.com/pooulad/bankApi/model"
 	"github.com/pooulad/bankApi/util"
 )
@@ -29,7 +28,7 @@ func (a *ApiServer) Run() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/account", MakeHttpHandleFunc(a.handleAccount))
-	router.HandleFunc("/account/{id}", middleware.WithJwtAuth(MakeHttpHandleFunc(a.handleAccountById)))
+	router.HandleFunc("/account/{id}", WithJwtAuth(MakeHttpHandleFunc(a.handleAccountById)))
 	router.HandleFunc("/transfer", MakeHttpHandleFunc(a.handleTransfer))
 
 	log.Println("JSON api server running on port:", a.listenAddr)
