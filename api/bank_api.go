@@ -90,6 +90,16 @@ func (a *ApiServer) handleCreateAccount(w http.ResponseWriter, r *http.Request) 
 }
 
 func (a *ApiServer) handleDeleteAccount(w http.ResponseWriter, r *http.Request) error {
+	id, err := util.GetAccountParameterId(r)
+	if err != nil {
+		return err
+	}
+
+	err = a.store.DeleteAccount(id)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
