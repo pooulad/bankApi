@@ -13,7 +13,7 @@ import (
 func ScanSqlRows(rows *sql.Rows) (*model.Account, error) {
 	account := new(model.Account)
 	err := rows.Scan(&account.ID, &account.FirstName, &account.LastName,
-		&account.Number, &account.Balance, &account.CreatedAt)
+		&account.Number, &account.EncryptedPassword, &account.Balance, &account.CreatedAt)
 
 	return account, err
 }
