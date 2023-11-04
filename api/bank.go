@@ -48,6 +48,15 @@ func (a *ApiServer) handleAccount(w http.ResponseWriter, r *http.Request) error 
 	return nil
 }
 
+func (a *ApiServer) handleGetAccount(w http.ResponseWriter, r *http.Request) error {
+	accounts, err := a.store.GetAccounts()
+	if err != nil {
+		return err
+	}
+
+	return WriteJson(w, http.StatusOK, accounts)
+}
+
 func (a *ApiServer) handleGetAccountById(w http.ResponseWriter, r *http.Request) error {
 	// account := model.NewAccount("mahdi", "pld")
 	id := mux.Vars(r)["id"]
