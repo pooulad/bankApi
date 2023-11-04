@@ -100,7 +100,7 @@ func (a *ApiServer) handleDeleteAccount(w http.ResponseWriter, r *http.Request) 
 		return err
 	}
 
-	return nil
+	return WriteJson(w, http.StatusNoContent, nil)
 }
 
 func (a *ApiServer) handleTransfer(w http.ResponseWriter, r *http.Request) error {
