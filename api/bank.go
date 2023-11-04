@@ -27,7 +27,6 @@ func (a *ApiServer) Run() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/accounts", MakeHttpHandleFunc(a.handleAccount))
-	router.HandleFunc("/account", MakeHttpHandleFunc(a.handleCreateAccount))
 	router.HandleFunc("/account/{id}", MakeHttpHandleFunc(a.handleGetAccountById))
 
 	log.Println("JSON api server running on port:", a.listenAddr)
@@ -38,6 +37,9 @@ func (a *ApiServer) Run() {
 func (a *ApiServer) handleAccount(w http.ResponseWriter, r *http.Request) error {
 	if r.Method == "GET" {
 		return a.handleGetAccounts(w, r)
+	}
+	if r.Method == "POST" {
+		return a.handleCreateAccount(w, r)
 	}
 	if r.Method == "DELETE" {
 		return a.handleDeleteAccount(w, r)
