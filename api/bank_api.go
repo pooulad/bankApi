@@ -29,6 +29,7 @@ func (a *ApiServer) Run() {
 
 	router.HandleFunc("/account", MakeHttpHandleFunc(a.handleAccount))
 	router.HandleFunc("/account/{id}", MakeHttpHandleFunc(a.handleAccountById))
+	router.HandleFunc("/transfer", MakeHttpHandleFunc(a.handleTransfer))
 
 	log.Println("JSON api server running on port:", a.listenAddr)
 
@@ -90,6 +91,7 @@ func (a *ApiServer) handleCreateAccount(w http.ResponseWriter, r *http.Request) 
 	if err != nil {
 		return err
 	}
+	defer r.Body.Close()
 
 	account := model.NewAccount(createAccountReq.FirstName, createAccountReq.LastName)
 
@@ -116,5 +118,20 @@ func (a *ApiServer) handleDeleteAccount(w http.ResponseWriter, r *http.Request) 
 }
 
 func (a *ApiServer) handleTransfer(w http.ResponseWriter, r *http.Request) error {
-	return nil
+	transferReq := new(model.TransferRequest)
+
+	err := json.NewDecoder(r.Body).Decode(transferReq)
+	if err != nil {
+		return err
+	}
+	defer r.Body.Close()
+
+	// account := model.NewAccount(transferReq.FirstName, transferReq.LastName)
+
+	// err = a.store.CreateAccount(account)
+	// if err != nil {
+	// 	return err
+	// }
+
+	return WriteJson(w, http.StatusOK, transferReq)
 }
