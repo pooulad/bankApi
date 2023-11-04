@@ -8,7 +8,7 @@ import (
 type apiFunc func(w http.ResponseWriter, r *http.Request) error
 
 type ApiError struct {
-	Error string
+	Error string `json:"error"`
 }
 
 func WriteJson(w http.ResponseWriter, status int, v any) error {
