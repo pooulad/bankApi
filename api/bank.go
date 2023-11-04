@@ -26,7 +26,7 @@ func NewApiServer(listenAddr string, store database.Storage) *ApiServer {
 func (a *ApiServer) Run() {
 	router := mux.NewRouter()
 
-	router.HandleFunc("/account", MakeHttpHandleFunc(a.handleAccount))
+	router.HandleFunc("/accounts", MakeHttpHandleFunc(a.handleAccount))
 	router.HandleFunc("/account/{id}", MakeHttpHandleFunc(a.handleGetAccountById))
 
 	log.Println("JSON api server running on port:", a.listenAddr)
@@ -36,7 +36,7 @@ func (a *ApiServer) Run() {
 
 func (a *ApiServer) handleAccount(w http.ResponseWriter, r *http.Request) error {
 	if r.Method == "GET" {
-		return a.handleGetAccount(w, r)
+		return a.handleGetAccounts(w, r)
 	}
 	if r.Method == "POST" {
 		return a.handleCreateAccount(w, r)
@@ -48,7 +48,7 @@ func (a *ApiServer) handleAccount(w http.ResponseWriter, r *http.Request) error 
 	return nil
 }
 
-func (a *ApiServer) handleGetAccount(w http.ResponseWriter, r *http.Request) error {
+func (a *ApiServer) handleGetAccounts(w http.ResponseWriter, r *http.Request) error {
 	accounts, err := a.store.GetAccounts()
 	if err != nil {
 		return err
