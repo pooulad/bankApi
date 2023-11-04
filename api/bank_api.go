@@ -38,8 +38,17 @@ func (a *ApiServer) Run() {
 }
 
 func (a *ApiServer) handleLogin(w http.ResponseWriter, r *http.Request) error {
+	if r.Method != "POST" {
+		return fmt.Errorf("method not allowd %s", r.Method)
+	}
 
-	return nil
+	var loginRequest model.LoginRequest
+	err := json.NewDecoder(r.Body).Decode(&loginRequest)
+	if err != nil {
+		return err
+	}
+
+	return WriteJson(w, http.StatusOK, loginRequest)
 }
 func (a *ApiServer) handleAccount(w http.ResponseWriter, r *http.Request) error {
 	if r.Method == "GET" {
