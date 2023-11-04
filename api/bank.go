@@ -13,7 +13,7 @@ import (
 
 type ApiServer struct {
 	listenAddr string
-	store      database.Storage
+	storage      database.Storage
 }
 
 func NewApiServer(listenAddr string) *ApiServer {
@@ -66,7 +66,7 @@ func (a *ApiServer) handleCreateAccount(w http.ResponseWriter, r *http.Request) 
 
 	account := model.NewAccount(CreateAccountReq.FirstName, CreateAccountReq.LastName)
 
-	err = a.store.CreateAccount(account)
+	err = a.storage.CreateAccount(account)
 	if err != nil {
 		return err
 	}
