@@ -38,7 +38,7 @@ func (a *ApiServer) Run() {
 }
 
 func (a *ApiServer) handleLogin(w http.ResponseWriter, r *http.Request) error {
-	
+
 	return nil
 }
 func (a *ApiServer) handleAccount(w http.ResponseWriter, r *http.Request) error {
@@ -98,19 +98,15 @@ func (a *ApiServer) handleCreateAccount(w http.ResponseWriter, r *http.Request) 
 	}
 	defer r.Body.Close()
 
-	account := model.NewAccount(createAccountReq.FirstName, createAccountReq.LastName)
+	account, err := model.NewAccount(createAccountReq.FirstName, createAccountReq.LastName, createAccountReq.Password)
+	if err != nil {
+		return err
+	}
 
 	err = a.store.CreateAccount(account)
 	if err != nil {
 		return err
 	}
-
-	tokenString, err := createJwt(account)
-	if err != nil {
-		return err
-	}
-
-	fmt.Println(tokenString)
 
 	return WriteJson(w, http.StatusOK, account)
 }
