@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -27,7 +28,7 @@ func (a *ApiServer) Run() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/account", MakeHttpHandleFunc(a.handleAccount))
-	router.HandleFunc("/account/{id}", MakeHttpHandleFunc(a.handleGetAccountById))
+	router.HandleFunc("/account/{id}", MakeHttpHandleFunc(a.handleAccountById))
 
 	log.Println("JSON api server running on port:", a.listenAddr)
 
@@ -55,6 +56,17 @@ func (a *ApiServer) handleGetAccounts(w http.ResponseWriter, r *http.Request) er
 	}
 
 	return WriteJson(w, http.StatusOK, accounts)
+}
+
+func (a *ApiServer) handleAccountById(w http.ResponseWriter, r *http.Request) error {
+	if r.Method == "GET" {
+		return a.handleGetAccountById(w, r)
+	}
+	if r.Method == "DELETE" {
+		return a.handleDeleteAccount(w, r)
+	}
+
+	return fmt.Errorf("method not allowd %s", r.Method)
 }
 
 func (a *ApiServer) handleGetAccountById(w http.ResponseWriter, r *http.Request) error {
