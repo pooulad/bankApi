@@ -5,9 +5,11 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	jwt "github.com/golang-jwt/jwt/v5"
 	"github.com/joho/godotenv"
+	"github.com/pooulad/bankApi/model"
 )
 
 func WithJwtAuth(handlerFunc http.HandlerFunc) http.HandlerFunc {
@@ -40,4 +42,21 @@ func validateJwtToken(tokenString string) (*jwt.Token, error) {
 		return []byte(jwt_secret_token), nil
 	})
 
+}
+
+func createJwt(account *model.Account) (string, error) {
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalf("Some error occured. Err: %s", err)
+	}
+
+	jwt_secret_token := os.Getenv("JWT_SECREC_TOKEN")
+
+	claims := &jwt.MapClaims{
+		"ExpiresAt":     15000,
+		"AccountNumber": account.Number,
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return token.SignedString(jwt_secret_token)
 }
