@@ -31,11 +31,16 @@ type Account struct {
 	CreatedAt         time.Time `json:"createdAt"`
 }
 
-func NewAccount(firstName string, lastName string) *Account {
-	return &Account{
-		FirstName: firstName,
-		LastName:  lastName,
-		Number:    int64(rand.Intn(1000000)),
-		CreatedAt: time.Now().UTC(),
+func NewAccount(firstName string, lastName string, password string) (*Account, error) {
+	encryptedPass, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, err
 	}
+	return &Account{
+		FirstName:         firstName,
+		LastName:          lastName,
+		EncryptedPassword: string(encryptedPass),
+		Number:            int64(rand.Intn(1000000)),
+		CreatedAt:         time.Now().UTC(),
+	}, nil
 }
