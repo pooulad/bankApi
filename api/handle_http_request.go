@@ -25,3 +25,7 @@ func MakeHttpHandleFunc(f apiFunc) http.HandlerFunc {
 		}
 	}
 }
+
+func perimssionDeniedWriter(w http.ResponseWriter) {
+	WriteJson(w, http.StatusForbidden, ApiError{Error: "permission denied"})
+}
