@@ -61,8 +61,6 @@ func (s *PostgresStore) GetAccountById(id int) (*model.Account, error) {
 		return nil, err
 	}
 
-	defer s.db.Close()
-
 	for rows.Next() {
 		return util.ScanSqlRows(rows)
 	}
@@ -74,8 +72,6 @@ func (s *PostgresStore) GetAccounts() ([]*model.Account, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	defer rows.Close()
 
 	accounts := []*model.Account{}
 
