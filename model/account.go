@@ -20,6 +20,7 @@ type TransferRequest struct {
 type CreateAccountRequest struct {
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
+	Password  string `json:"password"`
 }
 type Account struct {
 	ID                int       `json:"id"`
