@@ -27,6 +27,7 @@ func NewApiServer(listenAddr string, store database.Storage) *ApiServer {
 func (a *ApiServer) Run() {
 	router := mux.NewRouter()
 
+	router.HandleFunc("/login", MakeHttpHandleFunc(a.handleLogin))
 	router.HandleFunc("/account", MakeHttpHandleFunc(a.handleAccount))
 	router.HandleFunc("/account/{id}", withJwtAuth(MakeHttpHandleFunc(a.handleAccountById), a.store))
 	router.HandleFunc("/transfer", MakeHttpHandleFunc(a.handleTransfer))
@@ -36,6 +37,10 @@ func (a *ApiServer) Run() {
 	http.ListenAndServe(a.listenAddr, router)
 }
 
+func (a *ApiServer) handleLogin(w http.ResponseWriter, r *http.Request) error {
+	
+	return nil
+}
 func (a *ApiServer) handleAccount(w http.ResponseWriter, r *http.Request) error {
 	if r.Method == "GET" {
 		return a.handleGetAccounts(w, r)
