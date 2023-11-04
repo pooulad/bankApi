@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/pooulad/bankApi/model"
+	"github.com/pooulad/bankApi/util"
 )
 
 type Storage interface {
@@ -69,9 +70,7 @@ func (s *PostgresStore) GetAccounts() ([]*model.Account, error) {
 	accounts := []*model.Account{}
 
 	for rows.Next() {
-		account := new(model.Account)
-		err := rows.Scan(&account.ID, &account.FirstName, &account.LastName,
-			&account.Number, &account.Balance, &account.CreatedAt)
+		account, err := util.ScanSqlRows(rows)
 
 		if err != nil {
 			return nil, err
