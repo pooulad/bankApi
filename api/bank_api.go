@@ -100,7 +100,7 @@ func (a *ApiServer) handleDeleteAccount(w http.ResponseWriter, r *http.Request) 
 		return err
 	}
 
-	return WriteJson(w, http.StatusNoContent, nil)
+	return WriteJson(w, http.StatusNoContent, map[string]int{"deleted": id})
 }
 
 func (a *ApiServer) handleTransfer(w http.ResponseWriter, r *http.Request) error {
