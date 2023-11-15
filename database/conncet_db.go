@@ -17,7 +17,6 @@ func ConnectDB(cfg *config.PostgresConfig) (*PostgresStore, error) {
 
 	db, err := sql.Open("postgres", dsn)
 	if err != nil {
-		fmt.Println("postgres connected")
 		return nil, err
 	}
 
